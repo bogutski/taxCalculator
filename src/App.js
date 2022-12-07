@@ -15,6 +15,8 @@ function App() {
   const [householdExpenses, setHouseholdExpenses] = useState(0);
   const [taxPercentage, setTaxPercentage] = useState(0);
 
+  const [warningMessage, setWarningMessage] = useState("");
+
   const [tax, setTax] = useState(0);
 
   const onChangeMartialStatus = (event) => {
@@ -61,7 +63,19 @@ function App() {
     }
 
     tax = netIncome * (percentage / 100);
-    setTaxPercentage(+percentage.toFixed(2));
+    percentage = +percentage.toFixed(2)
+
+
+    // if any is nan or undefined, set it to 0
+    if (isNaN(tax) || isNaN(percentage)) {
+      tax = 0;
+      percentage = 0;
+      setWarningMessage("Please enter valid values");
+    } else {
+      setWarningMessage("");
+    }
+
+    setTaxPercentage(percentage);
     setTax(+tax.toFixed(2));
   }
 
@@ -97,15 +111,20 @@ function App() {
       </div>
 
 
-      <hr/>
-      <div>Salary: {salary}</div>
-      <div>Martial Status: {martialStatus}</div>
-      <div>Number of Dependents: {dependents}</div>
-      <div>Household Expenses: {householdExpenses}</div>
+      {/*<hr/>*/}
+      {/*<div>Salary: {salary}</div>*/}
+      {/*<div>Martial Status: {martialStatus}</div>*/}
+      {/*<div>Number of Dependents: {dependents}</div>*/}
+      {/*<div>Household Expenses: {householdExpenses}</div>*/}
 
       <button onClick={calculateTax} className='btn btn-primary'>Calculate tax</button>
 
-      <h2>Tax ${tax}, ({taxPercentage}%)</h2>
+      {warningMessage && <div className="alert alert-danger mt-3" role="alert">
+        {warningMessage}
+      </div>
+      }
+
+      <h2 className='mt-4'>Tax ${tax}, ({taxPercentage}%)</h2>
 
 
     </div>
