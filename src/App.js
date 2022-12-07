@@ -50,7 +50,12 @@ function App() {
     }
 
     // each dependent is 0.5% less
-    percentage = percentage - (dependents * 0.5);
+    // if dependents are more than 7, then 7 is the max
+    if (dependents > 7) {
+      percentage = percentage - 3.5;
+    } else {
+      percentage = percentage - (dependents * 0.5);
+    }
 
     // if percentage is less than 0, set it to 0
     if (percentage < 0) {
